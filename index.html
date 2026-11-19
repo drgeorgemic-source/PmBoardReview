@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Health Policy and Management: Board Review MCQs</title>
+<style>
+:root{--navy:#17306B;--tint:#E8EEF9;--line:#CBD6EA;--ink:#1B2433;--grey:#6B7A8C;--green:#2E8B57;--green-bg:#DDF3E4;--red:#C94F4F;--red-bg:#FBE3E3}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--ink);background:#fff;font-size:14px}
+#app{min-height:100%;display:flex;flex-direction:column}
+.screen{display:none;flex:1}
+.screen.on{display:flex;flex-direction:column}
+/* title */
+#start{background:var(--navy);color:#fff;align-items:center;justify-content:center;text-align:center;padding:40px 24px}
+#start h1{font-size:40px;margin:0 0 20px;font-weight:700}
+#start p{font-size:18px;margin:0 0 28px;color:#D6E1F5}
+#start .author{font-size:16px;font-weight:700;margin:0 0 36px}
+.btn{font:inherit;font-size:14px;font-weight:700;border:0;border-radius:0;padding:12px 28px;cursor:pointer;background:var(--navy);color:#fff}
+#start .btn{background:#fff;color:var(--navy);font-size:16px}
+.btn:focus-visible,.opt:focus-visible{outline:3px solid #F2B84B;outline-offset:2px}
+.btn[disabled]{opacity:.4;cursor:default}
+/* question */
+.wrap{width:100%;max-width:1000px;margin:0 auto;padding:28px 32px 32px}
+.top{display:flex;justify-content:flex-end;color:var(--grey);font-size:12px;margin-bottom:4px;min-height:16px}
+h2{font-size:22px;font-weight:700;line-height:1.3;margin:0 0 26px;min-height:58px}
+.body{display:flex;gap:24px;align-items:flex-start}
+.opts{flex:1 1 0;min-width:0}
+.opt{display:flex;align-items:center;width:100%;text-align:left;font:inherit;font-size:14px;color:var(--ink);background:var(--tint);border:1px solid var(--tint);border-radius:0;padding:0 14px 0 0;min-height:56px;margin:0 0 14px;cursor:pointer}
+.opt .chip{flex:0 0 40px;height:40px;margin:0 14px 0 14px;background:var(--navy);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+.opt:hover:not([disabled]){border-color:var(--navy)}
+.opt[disabled]{cursor:default}
+.opt.right{background:var(--green-bg);border:1.5px solid var(--green);font-weight:700}
+.opt.right .chip{background:var(--green)}
+.opt.wrong{background:var(--red-bg);border:1.5px solid var(--red);font-weight:700}
+.opt.wrong .chip{background:var(--red)}
+.opt.dim{background:#fff;border:1px solid var(--line);color:var(--grey)}
+.opt.dim .chip{background:var(--line);color:var(--grey)}
+.card{flex:0 0 36%;background:var(--tint);padding:14px 18px;min-height:230px;display:none}
+.card.on{display:block}
+.card .lead{margin:0}
+.card .ans{margin:0 0 6px;font-weight:700;color:var(--navy)}
+.card .verdict{display:inline-block;margin:0 0 8px;font-weight:700}
+.card .verdict.ok{color:var(--green)}.card .verdict.no{color:var(--red)}
+.card p.exp{margin:0;line-height:1.35}
+.nav{display:flex;justify-content:flex-end;margin-top:8px;min-height:44px}
+/* results */
+#end{align-items:center}
+#end .wrap{max-width:760px}
+#end h2{min-height:0;margin-bottom:8px}
+.score{font-size:48px;font-weight:700;color:var(--navy);margin:8px 0}
+.pill{display:inline-block;padding:4px 12px;font-weight:700;color:#fff;margin-bottom:18px}
+.pill.pass{background:var(--green)}.pill.fail{background:var(--red)}
+.review{margin:18px 0 0;padding:0;list-style:none}
+.review li{background:var(--tint);padding:12px 16px;margin-bottom:10px;line-height:1.35}
+.review b{color:var(--navy)}
+.review .mine{color:var(--red);font-weight:700}
+.review .good{color:var(--green);font-weight:700}
+.actions{margin-top:20px;display:flex;gap:12px}
+.btn.alt{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+@media(max-width:720px){
+ .wrap{padding:20px 16px}
+ #start h1{font-size:30px}
+ h2{font-size:19px;min-height:0}
+ .body{flex-direction:column;gap:6px}
+ .opts{width:100%}
+ .card{flex:none;width:100%;min-height:0}
+}
+</style>
+</head>
+<body>
+<div id="app">
+ <section id="start" class="screen on">
+  <h1>Health Policy and Management</h1>
+  <p>Preventive Medicine Board Review</p>
+  <div class="author">George Michael MD MPH</div>
+  <button id="startBtn" class="btn">Start</button>
+ </section>
+ <section id="quiz" class="screen">
+  <div class="wrap">
+   <div class="top"><span id="count"></span></div>
+   <h2 id="stem" tabindex="-1"></h2>
+   <div class="body">
+    <div class="opts" id="opts" role="group" aria-label="Answer choices"></div>
+    <div class="card" id="card" aria-live="polite"></div>
+   </div>
+   <div class="nav"><button id="nextBtn" class="btn" disabled>Next</button></div>
+  </div>
+ </section>
+ <section id="end" class="screen">
+  <div class="wrap">
+   <h2>Results</h2>
+   <div class="score" id="score"></div>
+   <div class="pill" id="pill"></div>
+   <div id="reviewHead" style="font-weight:700"></div>
+   <ul class="review" id="review"></ul>
+   <div class="actions"><button id="retryBtn" class="btn alt">Retake</button></div>
+  </div>
+ </section>
+</div>
+<script>
+var QUESTIONS = [{"q":"Which payer category contributes the largest share of total US health spending?","o":["Employer-sponsored private insurance","Government programs","Individual private insurance","Out-of-pocket payments"],"a":1,"short":"Government programs","e":"About 54% of Americans have employer coverage, but public programs paid about 43% of 2024 national health spending versus 31% for private health insurance. Medicare outspends Medicaid."},{"q":"Which type of healthcare service accounts for the largest share of US health spending?","o":["Physician and clinical services","Retail prescription drugs","Hospital care","Nursing home care"],"a":2,"short":"Hospital care","e":"Hospital care is the most expensive category: about 31% of 2024 national health spending ($1.6 trillion). Physician and clinical services followed at 21%, and retail prescription drugs at about 9%."},{"q":"Which program pays for the largest share of long-term care in the United States?","o":["Medicare","Private long-term care insurance","Out-of-pocket payments","Medicaid"],"a":3,"short":"Medicaid","e":"Medicaid pays most long-term care, mainly custodial care, after patients spend down their own money. Medicare covers skilled care, which is shorter in duration."},{"q":"Which source provides the largest share of funding for graduate medical education in the United States?","o":["Medicare","Medicaid","Veterans Health Administration","Health Resources and Services Administration"],"a":0,"short":"Medicare","e":"Medicare is the largest GME funder, with Medicaid a distant second, followed by the VHA and HRSA. Children's hospitals rely more on HRSA because they receive fewer Medicare dollars."},{"q":"Roughly what share of Medicare spending goes to beneficiaries in their final year of life?","o":["About 5%","About 10%","About 25%","About 50%"],"a":2,"short":"About 25%","e":"About 25% of Medicare spending on beneficiaries 65 and older goes to their last year of life (the book says 25–27%). Counting everyone who dies in a calendar year, the share is lower: 13.5% of traditional Medicare spending in 2014."},{"q":"A patient pays a flat $20 every time they see a specialist. Which cost-sharing mechanism is this?","o":["Deductible","Premium","Coinsurance","Copayment"],"a":3,"short":"Copayment","e":"A copayment is a fixed fee per service. A deductible is paid before coverage starts, and coinsurance is a percentage of the bill (for example 20%)."},{"q":"What does the evidence show about the effect of cost-sharing on patients' use of health services?","o":["It lowers only inappropriate use","It increases use of preventive care","It lowers both appropriate and inappropriate use","It reduces how many tests physicians order"],"a":2,"short":"Lowers appropriate and inappropriate use","e":"Patients are typically uninformed consumers, so cost-sharing acts as a barrier to both appropriate and inappropriate care. Utilization review is what reduces provider use, and it is done by whoever bears the financial risk."},{"q":"Who is eligible for Medicare coverage?","o":["Only low-income adults of any age","Adults 65 and older, plus some younger people with disabilities or ESRD","All uninsured adults over age 50","Only retirees of federal or military service"],"a":1,"short":"65 and older, plus some younger people","e":"Medicare covers adults 65 and older who are eligible for Social Security or Railroad Retirement benefits, plus younger people with long-term disabilities, end-stage renal disease (ESRD) or ALS. Eligibility is not based on income."},{"q":"How is Medicare Part A primarily financed?","o":["Dedicated payroll taxes (Hospital Insurance trust fund)","General federal revenue and monthly premiums","Federal matching of state spending","Excise taxes on health products"],"a":0,"short":"Dedicated payroll taxes","e":"Part A (hospital, skilled nursing and hospice care) is financed mainly by a dedicated 2.9% payroll tax, split between employer and employee, that funds the Hospital Insurance trust fund. Part B is funded by general revenue and premiums."},{"q":"Which part of Medicare pays for physician services and outpatient preventive care?","o":["Part A","Part B","Part C","Part D"],"a":1,"short":"Part B","e":"Part B covers clinician services, supplies and preventive care, funded by general revenue and premiums. Part A covers hospital, skilled nursing and hospice care."},{"q":"A beneficiary chooses a private managed care plan in place of traditional Medicare. Which part is this?","o":["Part A","Part B","Part C","Part D"],"a":2,"short":"Part C","e":"Part C, now called Medicare Advantage, delivers Part A and B benefits (usually Part D too) through private plans. About 54% of eligible beneficiaries were enrolled in 2025. Networks are usually narrower than in traditional Medicare."},{"q":"What does the FMAP (Federal Medical Assistance Percentage) represent?","o":["The share of GDP spent on health care","The federal share of state Medicaid spending","The annual Medicare trust fund balance","Tax relief for nonprofit hospitals"],"a":1,"short":"Federal share of Medicaid","e":"The FMAP is the portion of state Medicaid costs the federal government matches. By law it is at least 50% and at most 83%, and lower-income states get higher rates. Ten states were at the 50% floor in FY2025."},{"q":"Under the ACA, which US Preventive Services Task Force grades are covered at no cost to the patient?","o":["Grades A, B and C","Grade A only","Grades A and B","Grades A and I"],"a":2,"short":"Grades A and B","e":"Grade A means a substantial net benefit and grade B means a moderate benefit, each with good evidence. Most private plans and Medicaid expansion programs must cover A and B services without cost-sharing."},{"q":"A clinician is paid separately for every visit, test and procedure they perform. Which payment model is this?","o":["Capitation","Salary","Fee-for-service","Pay-for-performance"],"a":2,"short":"Fee-for-service","e":"Fee-for-service pays for each service delivered, so income rises with volume. That rewards productivity but also creates an incentive to order unnecessary tests and procedures. Capitation and salary do not tie pay to each service."},{"q":"A physician is paid a fixed monthly amount per enrolled patient, whatever services are used. Which model is this?","o":["Fee-for-service","Capitation","Diagnosis-related group","Pay-for-performance"],"a":1,"short":"Capitation","e":"Capitation shifts financial risk to the clinician. The incentive is to keep patients healthy and limit services, but it can lead to under-provision of care."},{"q":"Which method sets physician fees by estimating the time, effort, judgment and technical skill of each service?","o":["Capitation","Diagnosis-related group","Pay-for-performance","Resource-based relative value scale"],"a":3,"short":"Resource-based relative value scale","e":"The RBRVS is a component of fee-for-service payment. A DRG pays a hospital per episode, capitation pays per patient per period, and pay-for-performance rewards measured quality."},{"q":"A hospital is paid one lump sum per admission based on diagnosis. Which response does this encourage?","o":["Longer lengths of stay","Ordering additional tests","Internal utilization review to control costs","Staffing more nurses per patient"],"a":2,"short":"Internal utilization review","e":"A DRG is a prospective payment per episode, so the hospital profits by lowering costs: shorter stays, fewer tests, generic drugs and utilization review. Outlier payments cover unusually costly cases."},{"q":"Which law bars a physician from referring patients to a facility in which they have a financial interest?","o":["EMTALA","The Stark Law","ERISA","The Anti-Kickback Statute"],"a":1,"short":"The Stark Law","e":"Stark is a civil, strict-liability law: no intent is needed, and it covers physician referrals for designated health services. The Anti-Kickback Statute is criminal and intent-based (knowing and willful), applies to anyone, and covers any federally payable item or service."},{"q":"Which organization is a coordinated group of providers and facilities that share resources to coordinate care?","o":["Independent practice association","Preferred provider organization","Accountable care organization","Physician hospital organization"],"a":2,"short":"Accountable care organization","e":"An ACO is a coordinated group of providers and facilities that share resources and work together on patient care. Medicare pays for care in ACOs through alternative payment models. An IPA and a PHO negotiate with payers, and a PPO is an insurer's network."},{"q":"Which option best describes The Joint Commission?","o":["Government agency","For-profit, independent of government","Not-for-profit, contracted by government","Not-for-profit, independent of government"],"a":3,"short":"Not-for-profit, independent of government","e":"The Joint Commission is an independent not-for-profit that accredits more than 22,000 US healthcare organizations. Accreditation is voluntary and can count toward Medicare participation requirements."},{"q":"Which tool measures patients' perception of the care they received in a hospital?","o":["Hospital Consumer Assessment of Healthcare Providers and Systems","Healthcare Effectiveness Data and Information Set","Prospective payment system","Public Health Accreditation Board"],"a":0,"short":"HCAHPS","e":"HCAHPS is a nationally standardized patient survey. CMS publishes results on Care Compare, and they affect Medicare payment through Hospital Value-Based Purchasing. HEDIS compares health plans, a PPS pays per episode, and PHAB accredits health departments."}];
+var PASS = 80, L = ["A","B","C","D"];
+var N = QUESTIONS.length;
+var answers = [], cur = 0, done = false;
+
+function $(id){return document.getElementById(id);}
+function show(id){["start","quiz","end"].forEach(function(s){$(s).classList.toggle("on",s===id);});window.scrollTo(0,0);}
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+
+function score(){var n=0;answers.forEach(function(a,i){if(a===QUESTIONS[i].a)n++;});return n;}
+
+function render(){
+  var q=QUESTIONS[cur], picked=answers[cur], answered=picked>=0;
+  $("count").textContent="Question "+(cur+1)+" of "+N;
+  $("stem").textContent=q.q;
+  var box=$("opts");box.innerHTML="";
+  q.o.forEach(function(text,i){
+    var b=el("button","opt");b.type="button";
+    var chip=el("span","chip",L[i]);b.appendChild(chip);b.appendChild(el("span","",text));
+    if(answered){
+      b.disabled=true;
+      if(i===q.a) b.classList.add("right");
+      else if(i===picked) b.classList.add("wrong");
+      else b.classList.add("dim");
+      if(i===picked||i===q.a) b.setAttribute("aria-label",L[i]+". "+text+(i===q.a?" (correct answer)":" (your answer, incorrect)"));
+    }
+    b.addEventListener("click",function(){choose(i);});
+    box.appendChild(b);
+  });
+  var card=$("card");card.innerHTML="";
+  if(answered){
+    var ok=picked===q.a;
+    card.appendChild(el("div","verdict "+(ok?"ok":"no"),ok?"Correct":"Incorrect"));
+    card.appendChild(el("p","lead","The correct answer is"));
+    card.appendChild(el("p","ans",L[q.a]+". "+q.short));
+    card.appendChild(el("p","exp",q.e));
+    card.classList.add("on");
+  } else card.classList.remove("on");
+  var nb=$("nextBtn");nb.disabled=!answered;
+  nb.textContent=cur===N-1?"See results":"Next";
+}
+function choose(i){
+  if(answers[cur]>=0) return;
+  var q=QUESTIONS[cur];
+  answers[cur]=i;
+  render();
+  $("nextBtn").focus();
+}
+function next(){
+  if(answers[cur]<0) return;
+  if(cur<N-1){cur++;render();$("stem").focus();}
+  else finish();
+}
+function finish(){
+  cur=N;
+  var right=score(), pct=Math.round(100*right/N), passed=pct>=PASS;
+  done=true;
+  $("score").textContent=right+" / "+N+" ("+pct+"%)";
+  var pill=$("pill");pill.textContent=passed?"Passed":"Not passed (pass mark "+PASS+"%)";pill.className="pill "+(passed?"pass":"fail");
+  var list=$("review");list.innerHTML="";
+  var missed=0;
+  QUESTIONS.forEach(function(q,i){
+    if(answers[i]===q.a) return;
+    missed++;
+    var li=el("li");
+    li.appendChild(el("b","",(i+1)+". "+q.q));
+    var l1=el("div");l1.appendChild(document.createTextNode("Your answer: "));
+    l1.appendChild(el("span","mine",L[answers[i]]+". "+q.o[answers[i]]));li.appendChild(l1);
+    var l2=el("div");l2.appendChild(document.createTextNode("Correct answer: "));
+    l2.appendChild(el("span","good",L[q.a]+". "+q.o[q.a]));li.appendChild(l2);
+    list.appendChild(li);
+  });
+  $("reviewHead").textContent=missed?"Questions to review ("+missed+")":"All questions answered correctly.";
+  show("end");
+}
+function begin(){show("quiz");render();$("stem").focus();}
+function retry(){
+  answers=QUESTIONS.map(function(){return -1;});cur=0;done=false;
+  begin();
+}
+
+document.addEventListener("DOMContentLoaded",function(){
+  answers=QUESTIONS.map(function(){return -1;});
+  $("startBtn").addEventListener("click",begin);
+  $("nextBtn").addEventListener("click",next);
+  $("retryBtn").addEventListener("click",retry);
+  document.addEventListener("keydown",function(e){
+    if(!$("quiz").classList.contains("on")) return;
+    var k=e.key.toUpperCase(), idx=-1;
+    if(k>="A"&&k<="D") idx=k.charCodeAt(0)-65; else if(k>="1"&&k<="4") idx=parseInt(k,10)-1;
+    if(idx>=0){choose(idx);return;}
+    if((e.key==="ArrowRight")&&answers[cur]>=0) next();
+  });
+});
+</script>
+</body>
+</html>
